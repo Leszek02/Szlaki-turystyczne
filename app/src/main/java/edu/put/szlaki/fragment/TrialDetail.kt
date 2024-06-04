@@ -17,12 +17,14 @@ import edu.put.szlaki.database.StageDatabaseHandler
 import edu.put.szlaki.database.TrialDatabaseHandler
 import edu.put.szlaki.databinding.FragmentSecondBinding
 import edu.put.szlaki.src.Stage
+import android.os.CountDownTimer
 
 
 class TrialDetail : Fragment() {
 
     private var _binding: FragmentSecondBinding? = null
     private var id: String? = null
+    private lateinit var countUpTimer: CountUpTimer
     private lateinit var name: String
     private lateinit var trialName: TextView
     private lateinit var trialImage: ImageView
@@ -242,6 +244,18 @@ class TrialDetail : Fragment() {
         tableStage.addView(headerRow)
 
     }
+    abstract class CountUpTimer(private val startTime: Long) : CountDownTimer(startTime, 1000) {
+        private var elapsedTime = 0L
 
+        override fun onTick(millisUntilFinished: Long) {
+            elapsedTime = startTime - millisUntilFinished
+            onTick(elapsedTime)
+        }
+
+        override fun onFinish() {
+            // Not used in count-up timer
+        }
+
+    }
 
 }

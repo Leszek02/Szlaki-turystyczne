@@ -10,6 +10,9 @@ import android.view.Menu
 import android.view.MenuItem
 import android.view.View
 import edu.put.szlaki.R
+import edu.put.szlaki.R.id.FirstFragment
+import edu.put.szlaki.R.id.SecondFragment
+import edu.put.szlaki.R.id.newTrial
 import edu.put.szlaki.databinding.ActivityMainBinding
 
 class MainActivity : AppCompatActivity() {
@@ -28,22 +31,18 @@ class MainActivity : AppCompatActivity() {
         val navController = findNavController(R.id.nav_host_fragment_content_main)
         appBarConfiguration = AppBarConfiguration(navController.graph)
         setupActionBarWithNavController(navController, appBarConfiguration)
-        //TODO: make the button only visible on TialList fragment
-        binding.fab.setOnClickListener {view ->
-            view.findNavController().navigate(R.id.action_FirstFragment_to_newTrial)
+
+        navController.addOnDestinationChangedListener { _, destination, _ ->
+            when (destination.id) {
+                FirstFragment -> binding.fab.visibility = View.VISIBLE
+                else -> binding.fab.visibility = View.GONE
+            }
         }
 
+        // Setup FAB click listener
         binding.fab.setOnClickListener { view ->
-            // Navigate using the NavController associated with the fragment's view
-            findViewById<View>(R.id.nav_host_fragment_content_main)
-                .findNavController()
-                .navigate(R.id.action_FirstFragment_to_newTrial)
+            findNavController(R.id.nav_host_fragment_content_main).navigate(R.id.action_FirstFragment_to_newTrial)
         }
-
-
-
-
-
     }
 
     override fun onCreateOptionsMenu(menu: Menu): Boolean {
