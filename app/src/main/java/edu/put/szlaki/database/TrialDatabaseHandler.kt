@@ -76,6 +76,22 @@ class TrialDatabaseHandler(context: Context, name: String?,
         return trial
     }
 
+    fun getTrialName(context: Context, id: String?): Trial? {
+        val query = "SELECT * FROM $TABLE_NAME WHERE $COLUMN_ID LIKE \"$id\""
+        val db = this.writableDatabase
+        val cursor = db.rawQuery(query, null)
+        var trial: Trial? = null
+        if (cursor.moveToFirst())
+        {
+            trial = Trial(cursor.getString(0), cursor.getString(1), cursor.getString(2), cursor.getString(3), cursor.getString(4))
+        }
+        else
+        {
+            Toast.makeText(context, "Something went wrong", Toast.LENGTH_SHORT).show()
+        }
+        return trial
+    }
+
     fun trialRowsNumber(): Int{ // how many trials in the database
         var rowNumber = 0
         val query = "SELECT COUNT(*) FROM $TABLE_NAME"

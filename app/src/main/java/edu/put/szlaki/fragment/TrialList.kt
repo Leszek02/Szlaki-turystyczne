@@ -37,10 +37,10 @@ class TrialList : Fragment() {
         super.onViewCreated(view, savedInstanceState)
         trialView = binding.root.findViewById(R.id.TrialRecycler)
 
-        showTrials2()
+        showTrials()
     }
 
-    private fun showTrials2(){
+    private fun showTrials(){
         var trials: MutableList<Trial>? = null
         var context = requireContext()
         val dbHandler = TrialDatabaseHandler(context, null, null, 1)

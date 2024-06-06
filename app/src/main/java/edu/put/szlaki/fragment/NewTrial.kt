@@ -1,6 +1,8 @@
 package edu.put.szlaki.fragment
 
+import android.Manifest.permission.READ_EXTERNAL_STORAGE
 import android.content.Context
+import android.content.pm.PackageManager
 import android.os.Bundle
 import android.util.Log
 import androidx.fragment.app.Fragment
@@ -11,6 +13,8 @@ import android.widget.Button
 import android.widget.EditText
 import android.widget.ImageView
 import androidx.activity.result.contract.ActivityResultContracts
+import androidx.core.app.ActivityCompat
+import androidx.core.content.ContextCompat
 import androidx.navigation.fragment.findNavController
 import com.bumptech.glide.Glide
 import edu.put.szlaki.R
@@ -95,6 +99,12 @@ class NewTrial : Fragment() {
     }
 
     private fun loadImage() {
+
+        if (ContextCompat.checkSelfPermission(requireContext(), READ_EXTERNAL_STORAGE)
+            != PackageManager.PERMISSION_GRANTED) {
+
+            ActivityCompat.requestPermissions(requireActivity(), arrayOf(READ_EXTERNAL_STORAGE),100)
+        }
         Glide.with(this)
             .load(imagePath.toString())
             .into(trialPicture)

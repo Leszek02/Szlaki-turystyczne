@@ -1,11 +1,13 @@
 package edu.put.szlaki.fragment
 
+import android.annotation.SuppressLint
 import android.content.Context
 import android.os.Bundle
 import android.text.Editable
 import android.text.TextWatcher
 import android.util.Log
 import android.view.LayoutInflater
+import android.view.MotionEvent
 import android.view.View
 import android.view.ViewGroup
 import android.widget.*
@@ -19,12 +21,9 @@ import edu.put.szlaki.database.TrialDatabaseHandler
 import edu.put.szlaki.databinding.FragmentSecondBinding
 import edu.put.szlaki.src.Stage
 
-
 class TrialDetail : Fragment() {
 
     private var _binding: FragmentSecondBinding? = null
-    private var id: String? = null
-    private var name: String? = null
     private lateinit var trialName: TextView
     private lateinit var trialImage: ImageView
     private lateinit var trialLength: TextView
@@ -32,6 +31,11 @@ class TrialDetail : Fragment() {
     private lateinit var tableStage: TableLayout
     private lateinit var tableTime: TableLayout
     private lateinit var context: Context
+    private var id: String? = null
+    private var name: String? = null
+    private var x1: Float = 0f
+    private var x2: Float = 0f
+    private var fullscreen: Boolean = false
 
     private val binding get() = _binding!!
 
@@ -44,6 +48,7 @@ class TrialDetail : Fragment() {
         return binding.root
     }
 
+    @SuppressLint("ClickableViewAccessibility")
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         context = requireContext()
@@ -54,12 +59,12 @@ class TrialDetail : Fragment() {
         tableStage = binding.root.findViewById(R.id.tableStage)
         tableTime = binding.root.findViewById(R.id.tableTime)
         trialComment = binding.root.findViewById(R.id.trialComment)
-        trialComment.addTextChangedListener(object: TextWatcher {
+        trialComment.addTextChangedListener(object : TextWatcher {
             //Cause there is an error without those two first
-            override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int){}
-            override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int){}
+            override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {}
+            override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {}
 
-            override fun afterTextChanged(text: Editable?){
+            override fun afterTextChanged(text: Editable?) {
                 val dbHandler = TrialDatabaseHandler(context, null, null, 1)
                 dbHandler.addComment(name, trialComment.text.toString())
             }
@@ -70,6 +75,27 @@ class TrialDetail : Fragment() {
             showAddStageDialog()
         }
         generatePage()
+        view.setOnTouchListener { _, event ->
+            when (event.action) {
+                MotionEvent.ACTION_DOWN -> {
+                    x1 = event.x
+                    true
+                }
+                MotionEvent.ACTION_UP -> {
+                    x2 = event.x
+                    if (x2 - x1 > 300) {
+                        // Swiped from left to right
+                        refreshPage((id?.toInt()?.minus(1)).toString())
+                    }
+                    else if (x1 - x2 > 300) {
+                        // Swiped from left to right
+                        refreshPage((id?.toInt()?.plus(1)).toString())
+                    }
+                    true
+                }
+                else -> false
+            }
+        }
     }
 
     override fun onDestroyView() {
@@ -86,12 +112,29 @@ class TrialDetail : Fragment() {
         Glide.with(this)// load images from directory
             .load(trial?.image)
             .into(trialImage)
+        trialImage.setOnClickListener {
+            animateImage()
+        }
         trialComment.text = trial?.comment
         id = trial?.id
         Log.d("CAT", id.toString())
         trialLength.text = "Dlugosc: 0m"
         refreshStage()
         refrestTime()
+    }
+
+    private fun refreshPage(newId: String) {
+        var context = requireContext()
+        val dbHandler = TrialDatabaseHandler(context, null, null, 1)
+
+        val rows = dbHandler.trialRowsNumber()
+        if (newId.toInt() == 0 || newId.toInt() > rows) {
+            return
+        }
+
+        val trial = dbHandler.getTrialName(context, newId)
+        name = trial?.name
+        generatePage()
     }
 
     private fun showAddStageDialog() {
@@ -194,7 +237,7 @@ class TrialDetail : Fragment() {
                             refreshStage()
                         },
                         onNoClicked = {
-                            Toast.makeText(context, "BBBBBB", Toast.LENGTH_SHORT).show()
+                            Toast.makeText(context, "Anulowano", Toast.LENGTH_SHORT).show()
                         }
                             )
                     true
@@ -278,7 +321,7 @@ class TrialDetail : Fragment() {
                             refreshStage()
                         },
                         onNoClicked = {
-                            Toast.makeText(context, "BBBBBB", Toast.LENGTH_SHORT).show()
+                            Toast.makeText(context, "Anulowano", Toast.LENGTH_SHORT).show()
                         }
                     )
                     true
@@ -314,6 +357,10 @@ class TrialDetail : Fragment() {
         headerRow.layoutParams = trParamsSep
 
         tableStage.addView(headerRow)
+    }
+
+    private fun animateImage() {
+
     }
 
 }
