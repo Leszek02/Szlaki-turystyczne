@@ -17,6 +17,9 @@
         <action
             android:id="@+id/action_FirstFragment_to_newTrial"
             app:destination="@id/newTrial" />
+        <action
+            android:id="@+id/action_FirstFragment_to_stoper"
+            app:destination="@id/stoper" />
     </fragment>
     <fragment
         android:id="@+id/SecondFragment"
@@ -35,6 +38,15 @@
         tools:layout="@layout/fragment_new_trial" >
         <action
             android:id="@+id/action_newTrial_to_FirstFragment"
+            app:destination="@id/FirstFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/stoper"
+        android:name="edu.put.szlaki.fragment.Stoper"
+        android:label="fragment_stoper"
+        tools:layout="@layout/fragment_stoper" >
+        <action
+            android:id="@+id/action_stoper_to_FirstFragment"
             app:destination="@id/FirstFragment" />
     </fragment>
 </navigation>

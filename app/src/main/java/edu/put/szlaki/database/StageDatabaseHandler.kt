@@ -6,7 +6,6 @@ import android.database.sqlite.SQLiteDatabase
 import android.database.sqlite.SQLiteOpenHelper
 import android.widget.Toast
 import edu.put.szlaki.src.Stage
-import edu.put.szlaki.src.Trial
 
 class StageDatabaseHandler(context: Context, name: String?,
                            factory: SQLiteDatabase.CursorFactory?, version: Int) : SQLiteOpenHelper(context, DATABASE_NAME, null, DATABASE_VERSION) {
@@ -16,7 +15,7 @@ class StageDatabaseHandler(context: Context, name: String?,
         private const val DATABASE_NAME = "Stage.sb"
         const val TABLE_NAME = "stage"
         const val COLUMN_ID = "_id"
-        const val COLUMN_STAGENAME = "trialName"
+        const val COLUMN_STAGENAME = "stageName"
         const val COLUMN_LENGTH = "length"
         const val COLUMN_TIME = "time"
     }
@@ -90,7 +89,7 @@ class StageDatabaseHandler(context: Context, name: String?,
         return stages
     }
 
-    fun deleteStage(id: String?, name: String) {
+    fun deleteStage(id: String?, name: String?) {
         val query = "DELETE FROM $TABLE_NAME WHERE $COLUMN_ID = \"$id\" AND $COLUMN_STAGENAME = \"$name\""
         val db = this.writableDatabase
         db.execSQL(query)

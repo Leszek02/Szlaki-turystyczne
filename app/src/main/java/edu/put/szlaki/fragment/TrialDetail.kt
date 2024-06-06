@@ -14,23 +14,23 @@ import androidx.fragment.app.Fragment
 import com.bumptech.glide.Glide
 import edu.put.szlaki.R
 import edu.put.szlaki.database.StageDatabaseHandler
+import edu.put.szlaki.database.TimeDatabaseHandler
 import edu.put.szlaki.database.TrialDatabaseHandler
 import edu.put.szlaki.databinding.FragmentSecondBinding
 import edu.put.szlaki.src.Stage
-import android.os.CountDownTimer
 
 
 class TrialDetail : Fragment() {
 
     private var _binding: FragmentSecondBinding? = null
     private var id: String? = null
-    private lateinit var countUpTimer: CountUpTimer
-    private lateinit var name: String
+    private var name: String? = null
     private lateinit var trialName: TextView
     private lateinit var trialImage: ImageView
     private lateinit var trialLength: TextView
     private lateinit var trialComment: TextView
     private lateinit var tableStage: TableLayout
+    private lateinit var tableTime: TableLayout
     private lateinit var context: Context
 
     private val binding get() = _binding!!
@@ -52,6 +52,7 @@ class TrialDetail : Fragment() {
         trialImage = binding.root.findViewById(R.id.trialImage)
         trialLength = binding.root.findViewById(R.id.trialLength)
         tableStage = binding.root.findViewById(R.id.tableStage)
+        tableTime = binding.root.findViewById(R.id.tableTime)
         trialComment = binding.root.findViewById(R.id.trialComment)
         trialComment.addTextChangedListener(object: TextWatcher {
             //Cause there is an error without those two first
@@ -90,6 +91,7 @@ class TrialDetail : Fragment() {
         Log.d("CAT", id.toString())
         trialLength.text = "Dlugosc: 0m"
         refreshStage()
+        refrestTime()
     }
 
     private fun showAddStageDialog() {
@@ -136,9 +138,9 @@ class TrialDetail : Fragment() {
         }
     }
 
-    private fun showDeleteStageDialog(context: Context, onYesClicked: () -> Unit, onNoClicked: () -> Unit) {
+    private fun showDeleteDialog(context: Context, message: String,  onYesClicked: () -> Unit, onNoClicked: () -> Unit) {
         val builder = AlertDialog.Builder(context)
-        builder.setMessage("Na pewno chcesz usunąć ten etap?")
+        builder.setMessage(message)
             .setCancelable(false)
             .setPositiveButton("Tak") { dialog, id ->
                 onYesClicked.invoke()
@@ -159,7 +161,7 @@ class TrialDetail : Fragment() {
         tableStage.removeAllViews()
 
         //create header row
-        generateHeader()
+        generateStageHeader()
 
         if (stages != null) {
             val rows = stages.count()
@@ -184,8 +186,9 @@ class TrialDetail : Fragment() {
                 row.addView(stageTime)
 
                 row.setOnLongClickListener {
-                    showDeleteStageDialog (
+                    showDeleteDialog (
                         context = context,
+                        message = "Na pewno chcesz usunąć ten etap?",
                         onYesClicked = {
                             dbHandler.deleteStage(id, stageName.text.toString())
                             refreshStage()
@@ -204,7 +207,7 @@ class TrialDetail : Fragment() {
         }
     }
 
-    private fun generateHeader() {
+    private fun generateStageHeader() {
         val headerRow = TableRow(context)
         val fontSize = 20F
 
@@ -242,20 +245,75 @@ class TrialDetail : Fragment() {
         headerRow.layoutParams = trParamsSep
 
         tableStage.addView(headerRow)
-
     }
-    abstract class CountUpTimer(private val startTime: Long) : CountDownTimer(startTime, 1000) {
-        private var elapsedTime = 0L
+    
+    private fun refrestTime() {
+        val dbHandler = TimeDatabaseHandler(context, null, null, 1)
+        var times: MutableList<String>? = null
+        times = dbHandler.passTrialTime(name)
+        tableTime.removeAllViews()
 
-        override fun onTick(millisUntilFinished: Long) {
-            elapsedTime = startTime - millisUntilFinished
-            onTick(elapsedTime)
+        //create header row
+        generateTimeHeader()
+
+        if (times != null) {
+            val rows = times.count()
+            for (i in 0 until rows) {
+                val row = TableRow(context)
+
+                val rowNumber = TextView(context)
+                rowNumber.text = (i+1).toString()
+                row.addView(rowNumber)
+
+                val trialTime = TextView(context)
+                trialTime.text = times[i]
+                row.addView(trialTime)
+
+                row.setOnLongClickListener {
+                    showDeleteDialog (
+                        context = context,
+                        message = "Na pewno chcesz usunąć ten czas?",
+                        onYesClicked = {
+                            dbHandler.deleteTime(name, times[i])
+                            refreshStage()
+                        },
+                        onNoClicked = {
+                            Toast.makeText(context, "BBBBBB", Toast.LENGTH_SHORT).show()
+                        }
+                    )
+                    true
+                }
+                tableStage.addView(row)
+            }
         }
+    }
 
-        override fun onFinish() {
-            // Not used in count-up timer
-        }
+    private fun generateTimeHeader() {
+        val headerRow = TableRow(context)
+        val fontSize = 20F
 
+        val headerNumber = TextView(context)
+        headerNumber.text = "LP."
+        headerNumber.setTextSize(fontSize)
+        headerNumber.setPadding(10, 10, 10, 10)
+        headerRow.addView(headerNumber)
+
+        val headerTime = TextView(context)
+        headerTime.text = "Czas"
+        headerTime.setTextSize(fontSize)
+        headerTime.setPadding(10, 10, 10, 10)
+        headerRow.addView(headerTime)
+
+        val trParamsSep = TableLayout.LayoutParams(TableLayout.LayoutParams.MATCH_PARENT,
+            TableLayout.LayoutParams.WRAP_CONTENT)
+        trParamsSep.setMargins(5, 5, 5, 5)
+        val layoutParams = TableRow.LayoutParams(
+            TableRow.LayoutParams.MATCH_PARENT,
+            TableRow.LayoutParams.MATCH_PARENT
+        )
+        headerRow.layoutParams = trParamsSep
+
+        tableStage.addView(headerRow)
     }
 
 }

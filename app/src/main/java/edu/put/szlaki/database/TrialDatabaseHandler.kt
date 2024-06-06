@@ -52,7 +52,7 @@ class TrialDatabaseHandler(context: Context, name: String?,
         db.close()
     }
 
-    fun addComment(name: String, comment: String) {
+    fun addComment(name: String?, comment: String) {
         val db = this.writableDatabase
         val values = ContentValues()
         values.put(COLUMN_COMMENT, comment)
@@ -60,7 +60,7 @@ class TrialDatabaseHandler(context: Context, name: String?,
         db.close()
     }
 
-    fun getTrial(context: Context, name: String): Trial? {
+    fun getTrial(context: Context, name: String?): Trial? {
         val query = "SELECT * FROM $TABLE_NAME WHERE $COLUMN_TRIALNAME LIKE \"$name\""
         val db = this.writableDatabase
         val cursor = db.rawQuery(query, null)

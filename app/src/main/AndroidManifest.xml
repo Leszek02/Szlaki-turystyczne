@@ -30,6 +30,7 @@
             android:label="AAAAAA"
             android:theme="@style/Theme.Szlaki.NoActionBar">
         </activity>
+        <service android:name=".src.TimerService" />
     </application>
 
 </manifest>

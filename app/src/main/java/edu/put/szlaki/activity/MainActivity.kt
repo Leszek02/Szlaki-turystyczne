@@ -4,33 +4,29 @@ import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
 import androidx.navigation.findNavController
 import androidx.navigation.ui.AppBarConfiguration
-import androidx.navigation.ui.navigateUp
-import androidx.navigation.ui.setupActionBarWithNavController
-import android.view.Menu
 import android.view.MenuItem
 import android.view.View
+import androidx.appcompat.app.ActionBarDrawerToggle
+import androidx.core.view.GravityCompat
 import edu.put.szlaki.R
 import edu.put.szlaki.R.id.FirstFragment
-import edu.put.szlaki.R.id.SecondFragment
-import edu.put.szlaki.R.id.newTrial
 import edu.put.szlaki.databinding.ActivityMainBinding
 
 class MainActivity : AppCompatActivity() {
 
     private lateinit var appBarConfiguration: AppBarConfiguration
     private lateinit var binding: ActivityMainBinding
+    private lateinit var toggle: ActionBarDrawerToggle
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-
-        binding = ActivityMainBinding.inflate(layoutInflater)
+        binding=ActivityMainBinding.inflate(layoutInflater)
         setContentView(binding.root)
-
         setSupportActionBar(binding.toolbar)
 
         val navController = findNavController(R.id.nav_host_fragment_content_main)
         appBarConfiguration = AppBarConfiguration(navController.graph)
-        setupActionBarWithNavController(navController, appBarConfiguration)
+        //setupActionBarWithNavController(navController, appBarConfiguration) <- Breaks nav drawer icon
 
         navController.addOnDestinationChangedListener { _, destination, _ ->
             when (destination.id) {
@@ -39,31 +35,48 @@ class MainActivity : AppCompatActivity() {
             }
         }
 
+        binding.apply {
+            toggle= ActionBarDrawerToggle(this@MainActivity, drawerLayout, R.string.open, R.string.close)
+            drawerLayout.addDrawerListener(toggle)
+            toggle.syncState()
+
+            supportActionBar?.setDisplayHomeAsUpEnabled(true)
+
+            navView.setNavigationItemSelectedListener {
+                when(it.itemId) {
+                    R.id.firstItem -> {
+                        navController.navigate(R.id.FirstFragment)
+                        drawerLayout.closeDrawer(GravityCompat.START)
+                        true
+                    }
+                    R.id.secondItem->{
+                        navController.navigate(R.id.newTrial)
+                        drawerLayout.closeDrawer(GravityCompat.START)
+                        true
+                    }
+                    R.id.thirdItem->{
+                        navController.navigate(R.id.stoper)
+                        drawerLayout.closeDrawer(GravityCompat.START)
+                        true
+                    }
+                }
+                true
+            }
+        }
+
         // Setup FAB click listener
         binding.fab.setOnClickListener { view ->
             findNavController(R.id.nav_host_fragment_content_main).navigate(R.id.action_FirstFragment_to_newTrial)
         }
-    }
 
-    override fun onCreateOptionsMenu(menu: Menu): Boolean {
-        // Inflate the menu; this adds items to the action bar if it is present.
-        menuInflater.inflate(R.menu.menu_main, menu)
-        return true
     }
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
-        // Handle action bar item clicks here. The action bar will
-        // automatically handle clicks on the Home/Up button, so long
-        // as you specify a parent activity in AndroidManifest.xml.
-        return when (item.itemId) {
-            R.id.action_settings -> true
-            else -> super.onOptionsItemSelected(item)
+        if (toggle.onOptionsItemSelected(item)) {
+            true
         }
+        return super.onOptionsItemSelected(item)
     }
 
-    override fun onSupportNavigateUp(): Boolean {
-        val navController = findNavController(R.id.nav_host_fragment_content_main)
-        return navController.navigateUp(appBarConfiguration)
-                || super.onSupportNavigateUp()
-    }
+
 }

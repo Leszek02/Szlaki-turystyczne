@@ -12,7 +12,7 @@ class FabTrialListActivity : AppCompatActivity() {
 
         if (savedInstanceState == null){
             supportFragmentManager.beginTransaction()
-                .replace(R.id.TrialList, TrialList())
+                .replace(R.id.SecondFragment, TrialList())
                 .commit()
         }
     }

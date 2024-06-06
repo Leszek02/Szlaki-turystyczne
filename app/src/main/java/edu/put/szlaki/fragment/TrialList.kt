@@ -37,7 +37,6 @@ class TrialList : Fragment() {
         super.onViewCreated(view, savedInstanceState)
         trialView = binding.root.findViewById(R.id.TrialRecycler)
 
-
         showTrials2()
     }
 
