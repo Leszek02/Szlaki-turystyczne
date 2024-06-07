@@ -6,6 +6,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="@color/blue"
     tools:context=".fragment.Stoper">
 
     <TextView
@@ -23,21 +24,23 @@
         android:layout_height="wrap_content"
         android:padding="10dp">
 
-        <com.google.android.material.button.MaterialButton
+        <Button
             android:id="@+id/startStopButton"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="start"
+            android:textColor="@color/black"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintEnd_toStartOf="@id/resetButton"
             app:layout_constraintTop_toTopOf="parent" />
 
-        <com.google.android.material.button.MaterialButton
+        <Button
             android:id="@+id/resetButton"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="zapisz"
+            android:textColor="@color/black"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toEndOf="@+id/startStopButton"

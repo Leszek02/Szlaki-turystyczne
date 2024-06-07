@@ -3,6 +3,7 @@
     xmlns:tools="http://schemas.android.com/tools">
 
     <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
+    <uses-permission android:name="android.permission.CAMERA" />
 
     <application
         android:allowBackup="true"
@@ -14,22 +15,30 @@
         android:theme="@style/Theme.Szlaki"
         tools:targetApi="31">
         <activity
-            android:name=".activity.MainActivity"
-            android:exported="true"
-            android:label="@string/app_name"
-            android:theme="@style/Theme.Szlaki.NoActionBar">
+            android:name=".activity.StartActivity"
+            android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
+
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-
+        <activity
+            android:name=".activity.DetailActivity"
+            android:exported="false"
+            android:label="Szlaki"
+            android:theme="@style/Theme.Szlaki.NoActionBar" />
+        <activity
+            android:name=".activity.MainActivity"
+            android:exported="true"
+            android:label="@string/app_name"
+            android:theme="@style/Theme.Szlaki.NoActionBar"/>
         <activity
             android:name=".activity.FabTrialListActivity"
             android:exported="true"
-            android:label="AAAAAA"
-            android:theme="@style/Theme.Szlaki.NoActionBar">
-        </activity>
+            android:label="Szlaki"
+            android:theme="@style/Theme.Szlaki.NoActionBar" />
+
         <service android:name=".src.TimerService" />
     </application>
 

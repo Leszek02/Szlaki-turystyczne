@@ -5,6 +5,7 @@
     android:id="@+id/trialDetail"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:layout_marginTop="30dp"
     android:orientation="vertical"
     app:layoutDescription="@xml/fragment_second_scene"
     tools:context=".fragment.TrialDetail">
@@ -33,12 +34,11 @@
                         android:id="@+id/trialName"
                         android:layout_width="wrap_content"
                         android:layout_height="19dp"
-
                         android:layout_marginTop="40dp"
+                        app:layout_constraintHorizontal_bias="0.353"
                         app:layout_constraintLeft_toLeftOf="parent"
                         app:layout_constraintRight_toRightOf="parent"
-                        app:layout_constraintTop_toTopOf="parent"
-                        tools:layout_editor_absoluteX="40dp" />
+                        app:layout_constraintTop_toTopOf="parent" />
 
                     <TextView
                         android:id="@+id/trialLength"
@@ -47,11 +47,12 @@
                         android:layout_marginTop="16dp"
                         android:layout_marginBottom="10dp"
                         android:text="Dlugosc: 0m"
+                        app:layout_constraintBottom_toTopOf="@+id/trialImage"
+                        app:layout_constraintHorizontal_bias="0.324"
                         app:layout_constraintLeft_toLeftOf="parent"
                         app:layout_constraintRight_toRightOf="parent"
-                        app:layout_constraintBottom_toTopOf="@+id/trialImage"
                         app:layout_constraintTop_toBottomOf="@+id/trialName"
-                        tools:layout_editor_absoluteX="52dp" />
+                        app:layout_constraintVertical_bias="1.0" />
 
                     <ImageView
                         android:id="@+id/trialImage"
@@ -83,7 +84,6 @@
                         android:layout_marginTop="60dp"
                         android:layout_marginRight="20dp"
                         android:layout_weight="1"
-                        android:editable="true"
                         android:focusable="true"
                         android:inputType="textMultiLine"
                         app:layout_constraintLeft_toLeftOf="parent"
@@ -98,21 +98,30 @@
                 android:id="@+id/tableStage"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:layout_weight="1" />
+                android:layout_weight="1"
+                android:stretchColumns="*"
+                android:divider="@drawable/blackline"
+                android:showDividers="middle" />
 
             <Button
                 android:id="@+id/stageButton"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="New stage" />
+                android:text="Nowy etap"
+                android:textColor="@android:color/black" />
 
             <TableLayout
                 android:id="@+id/tableTime"
-                android:layout_width="match_parent"
+                android:layout_width="wrap_content"
                 android:layout_height="match_parent"
-                android:layout_weight="1" />
+                android:layout_marginTop="5dp"
+                android:layout_weight="1"
+                android:stretchColumns="*"
+                android:divider="@drawable/blackline"
+                android:showDividers="middle" />
 
         </LinearLayout>
+
     </ScrollView>
 
 

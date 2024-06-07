@@ -4,8 +4,6 @@ import android.content.ContentValues
 import android.content.Context
 import android.database.sqlite.SQLiteDatabase
 import android.database.sqlite.SQLiteOpenHelper
-import android.widget.Toast
-import edu.put.szlaki.src.Stage
 
 class TimeDatabaseHandler(context: Context, name: String?,
                            factory: SQLiteDatabase.CursorFactory?, version: Int) : SQLiteOpenHelper(context, DATABASE_NAME, null, DATABASE_VERSION) {

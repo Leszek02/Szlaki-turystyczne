@@ -1,4 +1,5 @@
 package edu.put.szlaki.database
+
 import android.content.ContentValues
 import android.content.Context
 import android.database.sqlite.SQLiteDatabase

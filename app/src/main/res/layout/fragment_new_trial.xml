@@ -4,6 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="@color/blue"
     tools:context=".fragment.NewTrial">
 
     <EditText
@@ -25,7 +26,8 @@
         android:layout_height="48dp"
         android:layout_marginStart="156dp"
         android:layout_marginTop="100dp"
-        android:text="New Trial"
+        android:text="Dodaj"
+        android:textColor="@color/black"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"

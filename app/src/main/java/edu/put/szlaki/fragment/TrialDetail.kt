@@ -35,7 +35,6 @@ class TrialDetail : Fragment() {
     private var name: String? = null
     private var x1: Float = 0f
     private var x2: Float = 0f
-    private var fullscreen: Boolean = false
 
     private val binding get() = _binding!!
 
@@ -84,11 +83,11 @@ class TrialDetail : Fragment() {
                 MotionEvent.ACTION_UP -> {
                     x2 = event.x
                     if (x2 - x1 > 300) {
-                        // Swiped from left to right
+                        // left to right
                         refreshPage((id?.toInt()?.minus(1)).toString())
                     }
                     else if (x1 - x2 > 300) {
-                        // Swiped from left to right
+                        // right to left
                         refreshPage((id?.toInt()?.plus(1)).toString())
                     }
                     true
@@ -112,9 +111,6 @@ class TrialDetail : Fragment() {
         Glide.with(this)// load images from directory
             .load(trial?.image)
             .into(trialImage)
-        trialImage.setOnClickListener {
-            animateImage()
-        }
         trialComment.text = trial?.comment
         id = trial?.id
         Log.d("CAT", id.toString())
@@ -158,7 +154,7 @@ class TrialDetail : Fragment() {
                 val dbHandler = StageDatabaseHandler(context, null, null, 1)
                 val stage = Stage(id, name, length, time)
                 dbHandler.addStage(context, stage)
-                refreshStage()
+                generatePage()
             }
             else {
                 Toast.makeText(context, "Wprowadzone dane są niepoprawne", Toast.LENGTH_SHORT).show()
@@ -171,6 +167,7 @@ class TrialDetail : Fragment() {
 
         val alertDialog = dialogBuilder.create()
         alertDialog.show()
+        alertDialog.getWindow()?.setBackgroundDrawableResource(android.R.color.system_primary_container_dark)
     }
 
     private fun String.floatOrString(): Boolean {
@@ -234,7 +231,7 @@ class TrialDetail : Fragment() {
                         message = "Na pewno chcesz usunąć ten etap?",
                         onYesClicked = {
                             dbHandler.deleteStage(id, stageName.text.toString())
-                            refreshStage()
+                            generatePage()
                         },
                         onNoClicked = {
                             Toast.makeText(context, "Anulowano", Toast.LENGTH_SHORT).show()
@@ -358,9 +355,4 @@ class TrialDetail : Fragment() {
 
         tableStage.addView(headerRow)
     }
-
-    private fun animateImage() {
-
-    }
-
 }

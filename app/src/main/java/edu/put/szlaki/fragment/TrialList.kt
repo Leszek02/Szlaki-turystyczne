@@ -1,11 +1,11 @@
 package edu.put.szlaki.fragment
 
+import android.content.Intent
 import android.os.Bundle
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import edu.put.szlaki.src.CaptionedImagesAdapter
@@ -13,6 +13,7 @@ import edu.put.szlaki.R
 import edu.put.szlaki.src.Trial
 import edu.put.szlaki.database.TrialDatabaseHandler
 import edu.put.szlaki.databinding.FragmentFirstBinding
+import edu.put.szlaki.activity.DetailActivity
 
 
 class TrialList : Fragment() {
@@ -66,10 +67,9 @@ class TrialList : Fragment() {
                 override fun onClick(name: String){
                     val bundle = Bundle()
                     bundle.putString("name", name)
-                    findNavController().navigate(
-                        R.id.action_FirstFragment_to_SecondFragment,
-                        bundle
-                    )
+                    val intent = Intent(requireContext(), DetailActivity::class.java)
+                    intent.putExtras(bundle)
+                    startActivity(intent)
                 }
             })
         }
