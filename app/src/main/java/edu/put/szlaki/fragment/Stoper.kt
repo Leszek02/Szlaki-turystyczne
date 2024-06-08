@@ -126,7 +126,7 @@ class Stoper : Fragment() {
         trials = dbHandler.passTrials()
 
         val rows = dbHandler.trialRowsNumber()
-        val trialNames = Array<String>(rows) { "" }
+        val trialNames = Array(rows) { "" }
         for (i in trialNames.indices) {
             adapter?.add(trials?.get(i)?.name.toString())
             adapter?.notifyDataSetChanged()

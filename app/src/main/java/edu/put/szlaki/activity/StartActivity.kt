@@ -17,7 +17,7 @@ class StartActivity : AppCompatActivity() {
         val splashText = findViewById<TextView>(R.id.splashText)
 
         val rotation = ObjectAnimator.ofFloat(splashText, "rotation", 0f, 360f)
-        rotation.duration = 2000 // 2 seconds
+        rotation.duration = 2000
         rotation.interpolator = LinearInterpolator()
 
         rotation.addListener(object : Animator.AnimatorListener {

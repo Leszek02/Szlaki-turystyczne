@@ -116,7 +116,7 @@ class TrialDetail : Fragment() {
         Log.d("CAT", id.toString())
         trialLength.text = "Dlugosc: 0m"
         refreshStage()
-        refrestTime()
+        refreshTime()
     }
 
     private fun refreshPage(newId: String) {
@@ -200,10 +200,9 @@ class TrialDetail : Fragment() {
         stages = dbHandler.passStages(id)
         tableStage.removeAllViews()
 
-        //create header row
-        generateStageHeader()
-
-        if (stages != null) {
+        if (stages != null && stages.isNotEmpty()) {
+            //create header row
+            generateStageHeader()
             val rows = stages.count()
             var length = 0F
             for (i in 0 until rows) {
@@ -211,6 +210,7 @@ class TrialDetail : Fragment() {
 
                 val rowNumber = TextView(context)
                 rowNumber.text = (i+1).toString()
+                row.setPadding(10, 30, 10, 30)
                 row.addView(rowNumber)
 
                 val stageName = TextView(context)
@@ -260,19 +260,16 @@ class TrialDetail : Fragment() {
         val headerName = TextView(context)
         headerName.text = "Nazwa"
         headerName.setTextSize(fontSize)
-        headerName.setPadding(10, 10, 10, 10)
         headerRow.addView(headerName)
 
         val headerLength = TextView(context)
         headerLength.text = "Dlugosc"
         headerLength.setTextSize(fontSize)
-        headerLength.setPadding(10, 10, 10, 10)
         headerRow.addView(headerLength)
 
         val headerTime = TextView(context)
         headerTime.text = "Czas"
         headerTime.setTextSize(fontSize)
-        headerTime.setPadding(10, 10, 10, 10)
         headerRow.addView(headerTime)
 
         val trParamsSep = TableLayout.LayoutParams(TableLayout.LayoutParams.MATCH_PARENT,
@@ -287,22 +284,23 @@ class TrialDetail : Fragment() {
         tableStage.addView(headerRow)
     }
     
-    private fun refrestTime() {
+    private fun refreshTime() {
         val dbHandler = TimeDatabaseHandler(context, null, null, 1)
         var times: MutableList<String>? = null
         times = dbHandler.passTrialTime(name)
         tableTime.removeAllViews()
 
-        //create header row
-        generateTimeHeader()
+        if (times != null && times.isNotEmpty()) {
+            //create header row
+            generateTimeHeader()
 
-        if (times != null) {
             val rows = times.count()
             for (i in 0 until rows) {
                 val row = TableRow(context)
 
                 val rowNumber = TextView(context)
                 rowNumber.text = (i+1).toString()
+                row.setPadding(10, 30, 10, 30)
                 row.addView(rowNumber)
 
                 val trialTime = TextView(context)
@@ -315,7 +313,7 @@ class TrialDetail : Fragment() {
                         message = "Na pewno chcesz usunąć ten czas?",
                         onYesClicked = {
                             dbHandler.deleteTime(name, times[i])
-                            refreshStage()
+                            generatePage()
                         },
                         onNoClicked = {
                             Toast.makeText(context, "Anulowano", Toast.LENGTH_SHORT).show()
@@ -323,7 +321,7 @@ class TrialDetail : Fragment() {
                     )
                     true
                 }
-                tableStage.addView(row)
+                tableTime.addView(row)
             }
         }
     }
@@ -341,7 +339,6 @@ class TrialDetail : Fragment() {
         val headerTime = TextView(context)
         headerTime.text = "Czas"
         headerTime.setTextSize(fontSize)
-        headerTime.setPadding(10, 10, 10, 10)
         headerRow.addView(headerTime)
 
         val trParamsSep = TableLayout.LayoutParams(TableLayout.LayoutParams.MATCH_PARENT,
@@ -353,6 +350,6 @@ class TrialDetail : Fragment() {
         )
         headerRow.layoutParams = trParamsSep
 
-        tableStage.addView(headerRow)
+        tableTime.addView(headerRow)
     }
 }

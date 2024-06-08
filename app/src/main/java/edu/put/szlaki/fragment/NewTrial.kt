@@ -4,7 +4,6 @@ import android.Manifest.permission.READ_EXTERNAL_STORAGE
 import android.content.Context
 import android.content.pm.PackageManager
 import android.os.Bundle
-import android.util.Log
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
@@ -12,6 +11,7 @@ import android.view.ViewGroup
 import android.widget.Button
 import android.widget.EditText
 import android.widget.ImageView
+import android.widget.Toast
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
@@ -33,6 +33,7 @@ class NewTrial : Fragment() {
     private lateinit var trialPicture: ImageView
     private lateinit var imageDirectory: File
     private var imagePath: String? = null
+    private var isImage: Boolean = false
 
     private val binding get() = _binding!!
 
@@ -43,7 +44,6 @@ class NewTrial : Fragment() {
             val input = requireContext().contentResolver.openInputStream(result)
             val output = FileOutputStream(newImageName())
             imagePath = result.toString()
-            Log.d("PICTUREEEEE", imagePath.toString())
             input?.copyTo(output)
             input?.close()
             output.close()
@@ -84,6 +84,14 @@ class NewTrial : Fragment() {
 
     fun newTrial(){
         context = requireContext()
+        if (nameText.text.toString().isEmpty()) {
+            Toast.makeText(requireContext(), "Uzupełnij nazwę szlaku!", Toast.LENGTH_SHORT).show()
+            return
+        }
+        if (!isImage) {
+            Toast.makeText(requireContext(), "Wybierz obrazek dla szlaku!", Toast.LENGTH_SHORT).show()
+            return
+        }
         val dbHandler = TrialDatabaseHandler(context, null, null, 1)
         val id = dbHandler.trialRowsNumber() + 1
         var trial = Trial(id.toString(), nameText.text.toString(), "", imagePath.toString(), "")
@@ -109,5 +117,6 @@ class NewTrial : Fragment() {
             .load(imagePath.toString())
             .into(trialPicture)
         trialPicture.setPadding(0, 5, 0, 5)
+        isImage = true
     }
 }
