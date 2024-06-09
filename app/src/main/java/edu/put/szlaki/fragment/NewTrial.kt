@@ -107,7 +107,6 @@ class NewTrial : Fragment() {
     }
 
     private fun loadImage() {
-
         if (ContextCompat.checkSelfPermission(requireContext(), READ_EXTERNAL_STORAGE)
             != PackageManager.PERMISSION_GRANTED) {
 

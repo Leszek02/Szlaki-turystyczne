@@ -164,7 +164,6 @@ class TrialDetail : Fragment() {
         dialogBuilder.setNegativeButton("Cancel") { dialog, _ ->
             dialog.cancel()
         }
-
         val alertDialog = dialogBuilder.create()
         alertDialog.show()
         alertDialog.getWindow()?.setBackgroundDrawableResource(android.R.color.system_primary_container_dark)
@@ -231,7 +230,7 @@ class TrialDetail : Fragment() {
                         message = "Na pewno chcesz usunąć ten etap?",
                         onYesClicked = {
                             dbHandler.deleteStage(id, stageName.text.toString())
-                            generatePage()
+                            refreshStage()
                         },
                         onNoClicked = {
                             Toast.makeText(context, "Anulowano", Toast.LENGTH_SHORT).show()
@@ -313,7 +312,7 @@ class TrialDetail : Fragment() {
                         message = "Na pewno chcesz usunąć ten czas?",
                         onYesClicked = {
                             dbHandler.deleteTime(name, times[i])
-                            generatePage()
+                            refreshTime()
                         },
                         onNoClicked = {
                             Toast.makeText(context, "Anulowano", Toast.LENGTH_SHORT).show()
